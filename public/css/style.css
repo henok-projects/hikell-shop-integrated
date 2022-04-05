@@ -1,0 +1,127 @@
+nav .nav-button-light,
+nav .nav-button-dark,
+nav .upload-button,
+nav .import-button,
+nav .live-button {
+    /* margin: 14px 0px; */
+    padding: 6px 12px !important;
+    line-height: normal !important;
+    font-size: 13px !important;
+    border-radius: 2em;
+    border: 0 !important;
+    box-shadow: none !important;
+    font-weight: 500;
+    margin-right: 10px;
+    transition: all 0.15s;
+}
+
+nav .upload-button svg,
+nav .import-button svg,
+nav .live-button svg {
+    margin: -3px 2px 0 1px !important;
+    width: 19px !important;
+    height: 19px !important;
+}
+nav .upload-button {
+    color: #b228c9 !important;
+    background-color: rgba(178, 40, 201, 0.15);
+}
+nav .nav-button-light {
+    color: #b228c9 !important;
+    background-color: rgba(131, 122, 182, 0.95);
+}
+nav .nav-button-dark {
+    color: #b228c9 !important;
+    background-color: rgba(101, 85, 194, 0.25);
+}
+nav .import-button {
+    color: #ee457e !important;
+    background-color: rgba(238, 69, 126, 0.15);
+}
+nav .live-button {
+    color: #2f9b2c !important;
+    background-color: rgba(30, 126, 51, 0.15);
+}
+nav .upload-button:hover {
+    color: #fff !important;
+    background: #b228c9 !important;
+}
+nav .nav-button-light:hover {
+    color: #fff !important;
+    background-color: rgba(101, 85, 194, 1);
+}
+nav .nav-button-dark:hover {
+    color: #fff !important;
+    background-color: rgba(101, 85, 194, 0.55);
+}
+nav .import-button:hover {
+    color: #fff !important;
+    background: #ee457e !important;
+}
+nav .live-button:hover {
+    color: #fff !important;
+    background: #1b961f !important;
+}
+.NavDropdownBox,
+.dropdownTri {
+    position: absolute;
+    top: 100%;
+    right: 0;
+}
+.iconSize-xs {
+    width: 5px;
+    height: 5px;
+}
+.iconSize-sm {
+    width: 12px;
+    height: 12px;
+}
+.iconSize {
+    width: 15px;
+    height: 15px;
+}
+.iconSize-bigger {
+    width: 20px;
+    height: 20px;
+}
+.iconSize-lg {
+    width: 25px;
+    height: 25px;
+}
+.iconSize-xl {
+    width: 50px;
+    height: 50px;
+}
+.toggle__dot {
+    top: -0.25rem;
+    left: -0.25rem;
+    transition: all 0.3s ease-in-out;
+}
+
+input#toogleTheme:checked ~ .toggle__dot {
+    transform: translateX(100%);
+    background-color: #4853bb;
+}
+[x-cloak] {
+    display: none;
+}
+
+#video-player {
+    width: 100% !important;
+    min-height: fit-content;
+    height: auto !important;
+    max-height: 500px;
+}
+
+/* @media (max-width: 1024px) {
+    .mejs__player {
+        min-width: 1000px !important;
+    }
+} */
+@media (min-width: 1024px) {
+    /* screen: lg */
+    .vidElement {
+        min-width: 1000px !important;
+        max-height: 40rem !important;
+    }
+}
