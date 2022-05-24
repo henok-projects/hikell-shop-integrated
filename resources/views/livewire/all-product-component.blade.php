@@ -20,39 +20,30 @@
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>name</th>
-                                    <th>shortdesch</th>
-                                    <th>Discount</th>
-                                    <th>Tax</th>
-                                    <th>Total</th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Phone</th>
-                                    {{-- <th>Email</th>
-                                    <th>Order Date</th>
-                                    <th>Zip Code</th>
-                                    <th>Status</th> --}}
-
+                                    <th>Id</th>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Stock</th>
+                                    <th>Price</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
                                 </tr>
 
                             </thead>
 
                             <tbody>
-                                @foreach ($product as $order)
+                                @foreach ($product as $product)
                                 <tr>
-                                    <td>1 </td>
-                                    <td>${{ $order->name }} </td>
-                                    <td>${{ $order->short_description }} </td>
-                                    <td>${{ $order->tax }} </td>
-                                    <td>${{ $order->regular_price }} </td>
-                                    <td>{{ $order->SKU }} </td>
-                                    <td>{{ $order->stock_status }} </td>
-                                    <td>{{ $order->quantity}} </td>
-                                    {{-- <td>{{ $order->email }} </td>
-                                    <td>{{ $order->created_at }} </td>
-                                    <td>{{ $order->zipcode }} </td>
-                                    <td>{{ $order->status }} </td> --}}
-                                    <td><a href="{{route('product.edit',['slug' =>$order->slug])}}" >edit </td>
+                                    <td>{{ $product->id }} </td>
+                                    <td> <img src="{{"storage/thumbnails/".$product->image}}" width="80" /> </td>
+                                    <td>{{ $product->name }} </td>
+                                    <td>{{ $product->stock_status }} </td>
+                                    <td>${{ $product->regular_price }} </td>
+                                    <td>{{ $product->created_at }} </td>
+
+                                    <td><a href="{{route('product.edit',['slug' =>$product->slug])}}"><i class="fa fa-edit fa-2x text-info"></i>
+                                  <a href="#" style="margin-left: 10px;" wire:click.prevent="deleteproduct({{$product->id}})"><i class="fa fa-times fa-2x text-danger"></i></a>
+                                    </td>
 
                                 </tr>
                                 @endforeach

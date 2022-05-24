@@ -5,16 +5,19 @@ namespace App\Http\Livewire;
 use App\Mail\OrderMail;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Stock;
 use Livewire\Component;
 use Cart;
 use Stripe;
-use App\Models\Product;
+
 use Illuminate\Support\Facades\Auth;
 use App\Models\Shipping;
 use App\Models\Transaction;
 use Exception;
 use Illuminate\Mail\Mailer;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\FunctionsController;
+use Illuminate\Support\Str;
 
 class CheckoutComponent extends Component
 {
@@ -29,6 +32,8 @@ class CheckoutComponent extends Component
     public $line1;
     public $line2;
     public $city;
+    public $order_id;
+
 
     public $province;
     public $zipcode;
@@ -55,8 +60,8 @@ class CheckoutComponent extends Component
     public $thankyou;
     public $paymentmode;
     public $shipmethod;
-
     public $state=[];
+    public $quantity;
 
 
 
@@ -77,6 +82,11 @@ class CheckoutComponent extends Component
             'country' => 'required',
         ]);
     }
+
+
+
+
+
     public function placeorder()
     {
         $this->validate([
@@ -102,8 +112,11 @@ class CheckoutComponent extends Component
         //         ]);
         // }
 
+
         $order = new Order();
         // $order->user_id = ->id;
+        $order->user_id = auth()->user()->user_id;
+        //  $order->product_id=$order->product_id;
         $order->subtotal = session()->get('checkout')['subtotal'];
         $order->discount = session()->get('checkout')['discount'];
         $order->tax = session()->get('checkout')['tax'];
@@ -111,6 +124,7 @@ class CheckoutComponent extends Component
 
 
         $order->fname = $this->fname;
+        $order->order_id =auth()->user()->id;
         $order->lname = $this->lname;
         $order->email = $this->email;
         $order->mobile = $this->mobile;
@@ -125,14 +139,32 @@ class CheckoutComponent extends Component
         $order->is_shipping_different = $this->shipToDifferent ? 1 : 0;
 
         $order->save();
+
         foreach (Cart::instance('cart')->content() as $item) {
             $orderItems = new OrderItem();
+            $stk= Stock::where('id',$item->id)->get()->first();
+            $stk->quantity = $stk->quantity-$item->qty;
+            $stk->update();
+            $orderItems->name = $item->name;
             $orderItems->product_id = $item->id;
-            $orderItems->order_id = $item->order_id;
+            $orderItems->order_id = $order->id;
             $orderItems->price = $item->price;
             $orderItems->qty = $item->qty;
             $orderItems->save();
+
         }
+//     public function mount(Cart::instance('cart')->content() as $item){
+//      $this->quantity= $item->id;
+// }
+
+        // foreach(Cart::instance('cart')->content() as $item) {
+        //   $orderItems= Stock::where('product_id',$this->product_id)->get()->first();
+
+        //     $orderItems->quantity =$orderItems->quantity- $item->qty;
+        //     $orderItems->save();
+        // }
+
+
         if ($this->shipToDifferent)
          {
             $this->validate([
@@ -150,6 +182,10 @@ class CheckoutComponent extends Component
 
             $shipping = new Shipping();
             $shipping->order_id=$order->id;
+            $shipping->product_id=$item->id;
+            $shipping->qty=$item->qty;
+            $shipping->price=$item->price;
+
             $shipping->fname = $this->s_fname;
             $shipping->lname = $this->s_lname;
             $shipping->email = $this->s_email;
@@ -157,8 +193,8 @@ class CheckoutComponent extends Component
             $shipping->line1 = $this->s_line1;
             $shipping->line2 = $this->s_line2;
             $shipping->city = $this->s_city;
-            // $shipping->qty = $this->s_qty;
-            $shipping->price = $this->s_price;
+          //  $shipping->qty = $this->s_qty;
+            // $shipping->price = $this->s_price;
             $shipping->province = $this->s_province;
             $shipping->zipcode = $this->s_zipcode;
             $shipping->country = $this->s_country;
@@ -170,13 +206,19 @@ class CheckoutComponent extends Component
 
         if ($this->paymentmode == 'paypal')
         {
-            $this->makeTransaction($order->id, 'pending');
-            $this->resetCart();
+            // $this->makeTransaction($order->id, 'pending');
+            // $this->resetCart();
+             $transaction = new Transaction();
+            $transaction->user_id=auth()->user()->user_id;
+            $transaction->order_id = $order->id;
+            $transaction->mode = 'paypal';
+            $transaction->status ='pending';
+            $transaction->save();
         }
         if($this->paymentmode == 'bank')
         {
             $transaction = new Transaction();
-            //   $transaction->user_id=$id;
+            $transaction->user_id=auth()->user()->user_id;
             $transaction->order_id = $order->id;
             $transaction->mode = 'bank';
             $transaction->status ='pending';
@@ -241,9 +283,11 @@ class CheckoutComponent extends Component
         $this->thankyou = 1;
         Cart::instance('cart')->destroy();
         session()->forget('checkout');
-
+        return redirect()->route('thankyou');
         $this->sendConfirmationOrder($order);
-    }
+
+
+}
 
     public function makeTransaction($order_id, $status)
     {
@@ -274,7 +318,7 @@ class CheckoutComponent extends Component
     public function render()
     {
         $this->verifyForCheckout();
-        return view('livewire.checkout-component')->layout('layouts.base');
+        return view('livewire.checkout-component')->extends('layouts.stockapp')->section('content');
     }
 
     public function sendConfirmationOrder($order)

@@ -66,15 +66,12 @@ public function generateSlug()
         }
        $product->category_id = $this->category_id;
        $product->save();
-       return redirect()->to('/shop');
+       return redirect()->to('/home');
        session()->flash('product add sucessfuly');
-
-
-
 
 }
     public function render()
     {    $this->stockcategory = StockCategory::all();
-        return view('livewire.edit-product',['stockcategory'=>$this->stockcategory])->layout('layouts.base');
+        return view('livewire.edit-product',['stockcategory'=>$this->stockcategory])->layout('layouts.sitebase');
     }
 }

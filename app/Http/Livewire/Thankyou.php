@@ -8,6 +8,6 @@ class Thankyou extends Component
 {
     public function render()
     {
-        return view('livewire.thankyou')->layout('layouts.base');
+        return view('livewire.thankyou')->extends('layouts.stockapp')->section('content');
     }
 }

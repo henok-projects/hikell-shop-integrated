@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\Site;
 use App\Models\Video;
 use App\Models\Book;
+use App\Models\Stock;
 use App\Models\Podcast;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\FunctionsController;
@@ -17,11 +18,13 @@ class SitePreview extends Component
     public $siteDetail = [];
     public $site_videos = 0;
     public $site_ebooks = 0;
+    public $site_stocks = 0;
     public $site_podcasts = 0;
     public $fileName = "";
     public $fileThumbnail = "thumbnails/";
     public $plan;
     public $asUser;
+    public $asStore;
     public $site_subscribed= 0;
     public $site = ''; // holds value of site_id
     public $site_user;
@@ -49,6 +52,15 @@ class SitePreview extends Component
                 $q->where('user_id',$this->site_user);
             }])->with('plan')->where('site_id', $this->site)->first();
             $this->content = $this->siteDetail->podcasts;
+        }
+       else if ($this->content_type == 'stocks') {
+            $this->fileName .= "stocks/"; // for s3
+            $this->siteDetail = Site::with(['stocks'=>function($q){
+                $q->orderBy('Created_at','desc');
+            }])->withCount(['subscriber as subscriber'=>function($q){
+                $q->where('user_id',$this->site_user);
+            }])->with('plan')->where('site_id', $this->site)->first();
+            $this->content = $this->siteDetail->stocks;
         } else if ($this->content_type == 'ebooks') {
             $this->fileName .= "books/"; // fors3
             $this->siteDetail = Site::with(['ebooks'=>function($q){
@@ -106,6 +118,9 @@ class SitePreview extends Component
             return redirect('/upload');
         } else if ($type == 'ebooks') {
             return redirect('/book/upload');
+        }
+         else if ($type == 'stocks') {
+            return redirect('/book/upload');
         } else if ($type == 'podcasts') {
             return redirect('/podcast/create');
         }
@@ -155,7 +170,7 @@ class SitePreview extends Component
         }
 
 
-        $counts = Site::withCount(['videos as videos', 'ebooks as ebooks', 'podcasts as podcasts'])->first();
+        $counts = Site::withCount(['videos as videos', 'ebooks as ebooks', 'stocks as stocks', 'podcasts as podcasts'])->first();
 
         $this->emit('refreshContent');
     }

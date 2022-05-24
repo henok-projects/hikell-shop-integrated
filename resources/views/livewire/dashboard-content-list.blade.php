@@ -83,11 +83,11 @@ $thumbnail = 'videos/thumnail/';
                   </span>
                   @elseif ($content == 'store')
                   <span class="text-sm text-yellow-600">
-                    <a href="#"> Update </a>
+                    <a href="{{route('product.edit',['slug' =>$list->slug])}}"> Update </a>
                   </span>
-                  <span class="text-xs text-red-400">
+                  {{-- <span class="text-xs text-red-400">
                     <a href="#"> Delete </a>
-                  </span>
+                  </span> --}}
                   @elseif ($content == 'podcast')
                   <span class="text-sm text-yellow-600">
                     {{-- <a href="{{ route('podcast.edit',['pdocast_id',$list->podcast_id]) }}"> Edit </a> --}}
@@ -125,7 +125,7 @@ $thumbnail = 'videos/thumnail/';
         <th class="w-1/6 px-4 py-2 text-center border">Price</th>
         <th class="w-1/6 px-4 py-2 text-center border">weight</th>
         {{-- <th class="w-1/6 px-4 py-2 text-center border">Posted date</th> --}}
-        {{-- <th class="p-2 border-r cursor-pointer text-sm">
+        <th class="p-2 border-r cursor-pointer text-sm">
           <div class="flex items-center justify-center">
             Action
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
@@ -133,7 +133,7 @@ $thumbnail = 'videos/thumnail/';
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
             </svg>
           </div>
-        </th> --}}
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -147,24 +147,24 @@ $thumbnail = 'videos/thumnail/';
         {{-- <td class="px-4 py-2 text-center border">{{ $list->description }}</td> --}}
         <td class="px-4 py-2 text-center border">{{ $list->quantity }}</td>
         <td class="px-4 py-2 text-center border">
-          @if($list->status == 0)
+          @if($list->stock_status == "outofstock")
           {{-- <a href="{{ url('user',['menu'=>'store','content'=>'deliverd']) }}"> --}}
             <button onclick="showMenu(true)">
-              {{ ($list->status)== 0? "YES" :"NO" }}</button>
+              {{ ($list->stock_status)== "outofstock"? "YES" :"NO" }}</button>
           </a>
           @else
 
-          {{ ($list->status)== 0? "YES" :"NO" }}
+          {{ ($list->stock_status)== "outofstock"? "YES" :"NO" }}
           @endif
         </td>
-        <td class="px-4 py-2 text-center border">{{ ($list->status)== 1? "Out of Stock" :"Avalilable" }}</td>
+        <td class="px-4 py-2 text-center border">{{$list->stock_status}}</td>
         <td class="px-4 py-2 text-center border">{{ $list->regular_price }} $</td>
         <td class="px-4 py-2 text-center border">{{ $list->SKU }} LBS</td>
         {{-- <td class="px-4 py-2 text-center border">{{ $list->created_at->format('Y.m.d') }}</td> --}}
-        {{-- <td class="flex items-center justify-between space-x-1">
-          <a href="#" class="bg-blue-500 p-2 text-white hover:shadow-lg text-xs">Edit</a>
-          <a href="#" class="bg-red-500 p-2 text-white hover:shadow-lg text-xs">Delete</a>
-        </td> --}}
+        <td class="flex items-center justify-between space-x-1">
+          <a href="{{route('product.edit',['slug' =>$list->slug])}}" class="bg-blue-500 p-2 text-white hover:shadow-lg text-xs">Edit</a>
+          <a href="" wire:click.prevent="deleteproduct({{$list->id}})" class="bg-red-500 p-2 text-white hover:shadow-lg text-xs">Delete</a>
+        </td>
       </tr>
       @endforeach
       @else
@@ -175,7 +175,7 @@ $thumbnail = 'videos/thumnail/';
     </tbody>
   </table>
   <div class="flex justify-center mt-3 lg:mt-8">
-    {{ $lists->links() }}
+    {{-- {{ $lists->links() }} --}}
   </div>
 </div>
 @endif

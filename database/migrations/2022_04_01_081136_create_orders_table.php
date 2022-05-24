@@ -16,8 +16,7 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
            $table->id();
             $table->string('user_id');
-            $table->string('order_id')->unique();
-            $table->string('product_id');
+            $table->bigInteger('order_id')->unsigned();
             $table->decimal('subtotal');
             $table->decimal('discount')->default(0);
             $table->decimal('tax');
@@ -36,6 +35,7 @@ class CreateOrdersTable extends Migration
             $table->boolean('is_shipping_different')->default(false);
             $table->timestamps();
             $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
+
 
         });
     }

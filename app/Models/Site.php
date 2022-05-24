@@ -16,6 +16,10 @@ class Site extends Model
   {
     return $this->hasMany(Book::class, 'user_id', 'user_id');
   }
+ public function stocks()
+  {
+    return $this->hasMany(Stock::class, 'user_id', 'user_id');
+  }
   public function podcasts()
   {
     return $this->hasMany(Podcast::class, 'user_id', 'user_id');

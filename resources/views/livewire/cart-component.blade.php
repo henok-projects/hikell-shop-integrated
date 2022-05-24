@@ -1,101 +1,85 @@
 <div>
-<!--main area-->
-<main id="main" class="main-site" >
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-dark" href="#">Home</a>
+                    <span class="breadcrumb-item active">MY Cart</span>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-lg-8 table-responsive mb-5">
+                <table class="table table-light table-borderless table-hover text-center mb-0">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Products</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                            <th>Remove</th>
+                        </tr>
+                    </thead>
 
-	<div class="container">
-
-		<div class="wrap-breadcrumb">
-			<ul>
-				<li class="item-link"><a href="#" class="link">home</a></li>
-				<li class="item-link"><span>login</span></li>
-			</ul>
-		</div>
-		<div class=" main-content-area">
-			{{-- @if(Cart::instance('cart')->count() >0) --}}
-
-			<div class="wrap-iten-in-cart">
-				@if (Session::has('success_message'))
+                @if (Session::has('success_message'))
 				<div>
 					<strong>Success</strong> {{ Session::get('success_message') }}
 				</div>
 				@endif
-				@if(Cart::instance('cart')->count() > 0)
-				<h3 class="box-title">Products Name</h3>
-				<ul class="products-cart">
-					@foreach(Cart::instance('cart')->content() as $item)
-					<li class="pr-cart-item">
-						<div class="product-image">
-							<figure><img src="{{ 'assets/products' }}/{{ $item->model->image }}" alt=""></figure>
-						</div>
-						<div class="product-name">
-							<a class="link-to-product"
-								href="{{ route('product.details', ['slug' => $item->model->slug]) }}">{{
-								$item->model->name }}</a>
-						</div>
-						<div class="price-field produtc-price">
-							<p class="price">{{ $item->model->regular_price }}</p>
-						</div>
-						<div class="quantity">
-							<div class="quantity-input">
-								<input type="text" name="product-quatity" value="{{ $item->qty }}" data-max="120"
-									pattern="[0-9]*">
-								<a href="#"  onclick="history.go(0);" class="btn btn-increase" 
-									wire:click.prevent="IncreaseQuanitiy('{{ $item->rowId }}')"></a>
-								<a class="btn btn-reduce" onClick="history.go(0);" 
-									wire:click.prevent="DecreaseQuantity('{{ $item->rowId }}')"></a>
-							</div>
-						</div>
-						<div class="price-field sub-total">
-							<p class="price">${{ $item->subtotal }}</p>
-						</div>
-						<div class="delete">
-							<a href="#" class="btn btn-delete" title="" onClick="history.go(0);"
-								wire:click.prevent="destroy('{{ $item->rowId}}')">
-								<span>Delete from your cart</span>
-								<i class="fa fa-times-circle" aria-hidden="true"></i>
-							</a>
-						</div>
-					</li>
-
-					@endforeach
-				</ul>
-				@else
-				<p>NO Item</p>
-
-				@endif
-			</div>
-
-			<div class="summary">
-				<div class="order-summary">
-					<h4 class="title-box">Order Summary</h4>
-					<p class="summary-info"><span class="title">Subtotal</span><b class="index">${{ Cart::instance('cart')->subtotal()
-							}}</b></p>
-					<p class="summary-info"><span class="title">Shipping</span><b class="index">${{ Cart::instance('cart')->tax() }}</b>
-					</p>
-					<p class="summary-info total-info "><span class="title">Total</span><b class="index">${{
-							Cart::instance('cart')->total() }}</b></p>
-				</div>
-				<div class="checkout-info">
-					<label class="checkbox-field">
-						<input class="frm-input " name="have-code" id="have-code" value="" type="checkbox"><span>I have
-							promo code</span>
-					</label>
-					<a class="btn btn-checkout" href="/checkout">Check out</a>
-					<a class="link-to-shop" href="shop.html">Continue Shopping<i class="fa fa-arrow-circle-right"
-							aria-hidden="true"></i></a>
-				</div>
-				<div class="update-clear">
-					<a class="btn btn-clear" href="#" wire:click.prevent="destroyall()" >Clear Shopping Cart</a>
-					<a class="btn btn-update" href="#">Update Shopping Cart</a>
-				</div>
-			</div>
-			
-{{-- @endif --}}
-		</div>
-		<!--end main content area-->
-	</div>
-	<!--end container-->
-
-</main>
-<!--main area-->
+                    <tbody class="align-middle">
+                        @foreach(Cart::instance('cart')->content() as $item)
+                        <tr>
+                            <td class="align-middle"><img src="{{ asset('/storage/thumbnails/' .$item->model->image) }}" alt="" style="width: 50px;"> {{ $item->model->name }}</td>
+                            <td class="align-middle">${{  $item->model->regular_price  }}</td>
+                            <td class="align-middle">
+                                <div class="input-group quantity mx-auto" style="width: 100px;">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-sm btn-primary btn-minus" wire:click.prevent="DecreaseQuantity('{{ $item->rowId }}')" >
+                                        <i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                    <input type="number" class="form-control form-control-sm bg-secondary border-0 text-center" min="1" value="{{ $item->qty }}"  pattern="[1-9]*">
+                                    <div class="input-group-btn">
+                                        <button class="btn btn-sm btn-primary btn-plus"  wire:click.prevent="IncreaseQuanitiy('{{ $item->rowId }}')" >
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="align-middle">${{ $item->subtotal }}</td>
+                            <td class="align-middle">
+                                <a href="#" class="btn btn-sm btn-danger" wire:click="$refresh" wire:click.prevent="destroy('{{ $item->rowId}}')"}}>
+                                    <i class="fa fa-times"></i>
+                                    </a></td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-4">
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Cart Summary</span></h5>
+                <div class="bg-light p-30 mb-5">
+                    <div class="border-bottom pb-2">
+                        <div class="d-flex justify-content-between mb-3">
+                            <h6>Subtotal</h6>
+                            <h6>${{ Cart::instance('cart')->subtotal() }}</h6>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <h6 class="font-weight-medium">Shipping</h6>
+                            <h6 class="font-weight-medium">${{ Cart::instance('cart')->tax() }}</h6>
+                        </div>
+                    </div>
+                    <div class="pt-2">
+                        <div class="d-flex justify-content-between mt-2">
+                            <h5>Total</h5>
+                            <h5>{{Cart::instance('cart')->total() }}</h5>
+                        </div>
+                        <a href="/checkout" class="btn btn-block btn-primary font-weight-bold my-3 py-3">Proceed To Checkout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

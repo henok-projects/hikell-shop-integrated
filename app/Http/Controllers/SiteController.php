@@ -6,6 +6,7 @@ use App\Models\Plan;
 use App\Models\Site;
 use App\Models\Video;
 use App\Models\Payment;
+use App\Models\Stock;
 use App\Models\Download;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,12 +21,13 @@ class SiteController extends Controller
      */
     public function index()
     {   $asUser=false;
+        $asStore=false;
         $freeTrial=false;
         $curUser = auth()->user();
         $site = Site::where('user_id', $curUser->user_id)->first();
         if ($site) {
             $videos = Video::where('user_id', $curUser->user_id);
-            return view('sites.preview', compact('site', 'videos','asUser','freeTrial'));
+            return view('sites.preview', compact('site', 'videos','asUser','asStore','freeTrial'));
             // return view('sites.dashboard', compact('site', 'videos'));
         }
 
@@ -70,6 +72,7 @@ class SiteController extends Controller
 
         return view('sites.index', compact('site'));
     }
+
 
     public function reused($site_name)
     {
@@ -130,7 +133,6 @@ class SiteController extends Controller
             $request->file('site_image')->store('public/theme');
             $file_name = $request->file('site_image')->hashName();
         }
-
         // upload background image
         $site_avatar = null;
         if ($request->hasFile('site_avatar')) {
@@ -233,7 +235,7 @@ class SiteController extends Controller
         }
         $latestVideos = 'videos';
         $site = Site::where('site_name', $site_name)
-                    ->withCount(['videos as videos', 'ebooks as ebooks', 'podcasts as podcasts'])
+                    ->withCount(['videos as videos', 'ebooks as ebooks', 'stocks as stocks', 'podcasts as podcasts'])
                     ->withCount(['subscriber as subscribed' => function ($query) {
                          $query->where('user_id', auth()->user()->user_id);
                     }])
@@ -245,11 +247,7 @@ class SiteController extends Controller
                         $q->where('site_trial.user_id',auth()->user()->user_id)
                         ->where('sites.trial_period','<>',null)
                         ->where(DB::raw("DATEDIFF('trial_end', CURRENT_TIMESTAMP()) <= 0") );
-                    }])
-                   
-                    ->first();
-
-
+                    }])->first();
                  if($site->user_id==auth()->user()->user_id){
                      $freeTrial=true;
                  }

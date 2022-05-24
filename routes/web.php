@@ -5,6 +5,7 @@ use \App\Models\Site;
 use \App\Models\User;
 use \App\Models\Video;
 use \App\Models\Report;
+use \App\Models\Stock;
 use \App\Models\Payment;
 use \App\Models\Category;
 use \App\Models\Promotion;
@@ -17,6 +18,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IdolController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\StoreController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\TwoFAController;
 use App\Http\Controllers\VideoController;
@@ -37,40 +39,116 @@ use App\Http\Controllers\RemoveContentController;
 use App\Http\Controllers\StripeConnectController;
 use App\Http\Controllers\SocialShareButtonsController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-
+//for shop
 use App\Http\Livewire\HomeComponent;
+// use App\Http\Livewire\User\UserReviewComponent;
 use App\Http\Livewire\ShopComponent;
 use App\Http\Livewire\StockComponent;
-use App\Http\Livewire\WishlistComponent;
 use App\Http\Livewire\CartComponent;
 use App\Http\Livewire\DetailsComponent;
 use App\Http\Livewire\AddStockComponent;
 use App\Http\Livewire\CheckoutComponent;
-use App\Http\Livewire\UserOrderComponent;
+use App\Http\Livewire\ShopStatus;
+use App\Http\Livewire\SearchShop;
+// use App\Http\Livewire\UserOrderComponent;
 use App\Http\Livewire\AllProductComponent;
+use App\Http\Livewire\WishlistComponent;
 use App\Http\Livewire\Stocklist;
+use App\Http\Livewire\StorePreview;
 use App\Http\Livewire\EditProduct;
+use App\Http\Livewire\Thankyou;
+// use App\Http\Livewire\Popup;
+ use App\Http\Livewire\UsersOrderDetailsComponent;
+use App\Http\Livewire\UsersOrderComponent;
+// for shope site
+use App\Http\Livewire\SiteHomeComponent;
+use App\Http\Livewire\SiteShopComponent;
+use App\Http\Livewire\SiteStockComponent;
+use App\Http\Livewire\SiteFooter;
+use App\Http\Livewire\SiteCartComponent;
+use App\Http\Livewire\SiteDetailsComponent;
+use App\Http\Livewire\SiteAddStockComponent;
+use App\Http\Livewire\SiteCheckoutComponent;
+use App\Http\Livewire\SiteAllProductComponent;
+use App\Http\Livewire\SiteWishlistComponent;
+use App\Http\Livewire\SiteStocklist;
+use App\Http\Livewire\SiteStorePreview;
+use App\Http\Livewire\SiteEditProduct;
+use App\Http\Livewire\SiteUsersOrderDetailsComponent;
+use App\Http\Livewire\SiteUsersOrderComponent;
+use App\Http\Livewire\SiteShopStatus;
+use App\Http\Livewire\SiteSearchShop;
+use App\Http\Controllers\front\RatingController;
+use App\Http\Controllers\front\PratingController;
+use App\Http\Controllers\PopupController;
+// use App\Http\Livewire\ProductRatings;
 
 
-
+//routes for hikell shope
+Route::get('/user/orders/{order_id}',UsersOrderDetailsComponent::class)->name('user.orderdetails');
+// Route::get('/user/review/{order_item_id}', UserReviewComponent::class)->middleware(['auth'])->name('user.review');
 Route::get('/',HomeComponent::class)->middleware(['auth']);
-Route::get('/shop',ShopComponent::class)->middleware(['auth']);
+Route::get('/footer',SiteFooter::class)->middleware(['auth']);
+Route::get('/home',ShopComponent::class)->middleware(['auth'])->name('home');
 Route::get('/stocklist',Stocklist::class)->middleware(['auth']);
-Route::get('/orders',UserOrderComponent::class)->middleware(['auth']);
 Route::get('/cart',CartComponent::class)->middleware(['auth'])->name('product.cart');
 Route::get('/allproduct',AllProductComponent::class)->middleware(['auth'])->name('product.allproduct');
-Route::get('/checkout',CheckoutComponent::class);
+Route::get('/checkout',CheckoutComponent::class)->name('checkout');
 Route::get('/editproduct/{slug}',EditProduct::class)->middleware(['auth'])->name('product.edit');
 Route::get('/uploadtostock',AddStockComponent::class)->middleware(['auth'])->name('product.addtostock');
-Route::get('/product/{slug}', DetailsComponent::class)->middleware(['auth'])->name('product.details');
+Route::get('/product/{slug}', DetailsComponent::class,)->middleware(['auth'])->name('product.details');
 Route::get('/wishlist',WishlistComponent::class)->middleware(['auth'])->name('product.wishlist');
+Route::get('/user/orders',UsersOrderComponent::class)->name('user.orders');
+Route::get('/orders',UsersOrderComponent::class);
+Route::get('/Thankyou',Thankyou::class)->name('thankyou');
+// Route::get('/sitethankyou',SiteThankyou::class)->name('site-thankyou');
+Route::get('/popup',PopupController::class);
+Route::get('/shopstatus',ShopStatus::class)->middleware(['auth'])->name('shop.status');
+Route::get('/search/shop',SearchShop::class)->name('shop.search'); 
+//.....Route for site stores
+Route::get('/{site_id}/orders/{order_id}',SiteUsersOrderDetailsComponent::class);
+Route::get('/{site_id}/search',SiteSearchShop::class);
+// Route::get('/sitestore/{site_name}', [SiteStorePreview::class])->middleware(['auth']);
+Route::get('/{site_id}/store',SiteShopComponent::class);
+Route::get('/{site_id}/cart',SiteCartComponent::class)->middleware(['auth']);
+Route::get('/{site_id}/allproduct',SiteAllProductComponent::class)->middleware(['auth']);
+Route::get('/{site_id}/checkout',SiteCheckoutComponent::class);
+Route::get('/{site_id}editproduct/{slug}',SiteEditProduct::class)->middleware(['auth'])->name('product.edit');
+Route::get('/{site_id}/upload',SiteAddStockComponent::class)->middleware(['auth']);
+Route::get('/{site_id}/product/{slug}', SiteDetailsComponent::class,)->middleware(['auth'])->name('product.sitedetails');
+Route::get('/{site_id}/wishlist',SiteWishlistComponent::class)->middleware(['auth']);
+// Route::get('/siteuser/orders',SiteUsersOrderComponent::class);
+Route::get('/{site_id}/orders',SiteUsersOrderComponent::class);
+Route::get('/{site_id}/shopstatus',SiteShopStatus::class)->middleware(['auth']);
+// Route::get('/search/shop',SearchShop::class)->name('shop.search');
 
+//....end of site shope route
+// Route::get('/post-store',[ProductRatings::class])->name('post.store');
+// Route::get('/post-create',[ProductRatings::class, 'store']);
 
+//....Route for hikel videos
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/connect', function () {
     return view('connect');
 })->name('connect');
+
+// Route::get('/shop', function () {
+//     return view('stores.shop');
+// });
+// Route::get('/cart', function () {
+//     return view('stores.cart');
+// });
+// Route::get('/checkout', function () {
+//     return view('stores.checkout');
+// });
+Route::get('/contact', function () {
+    return view('stores.contact');
+});
+// Route::get('/detail', function () {
+//     return view('stores.detail');
+// });
+
 
 Route::get('/paypal', function () {
     return view('paypal');
@@ -91,7 +169,15 @@ Route::get('/upload', function () {
     $countries = FunctionsController::countries();
     return view('upload', compact(['movieCategories', 'nonmovieCategories', 'countries', 'size']));
 })->middleware(['auth'])->name('upload');
+Route::get('users_dashboard', function () {
+    return view('layouts.dashboard');
+})->name('users_dashboard');
 
+
+
+
+
+Route::get('/product_rating', [ProductRatings::class]);
 Route::get('/upload/hgt', [VideoController::class, 'upload_hgt'])->middleware(['auth'])->name('upload.hgt');
 
 Route::get('/enroll', function () {
@@ -343,7 +429,7 @@ Route::post('/goldenbuzzer',  [VoteController::class, 'pay'])->middleware(['auth
 Route::post('/enroll/pay',  [EnrolledUserController::class, 'pay'])->middleware(['auth']); // enrollment payment confirmation
 Route::post('/video/pay',  [VideoPaymentController::class, 'pay'])->middleware(['auth']); // video payment confirmation
 Route::post('/paid/storage/upgrade',  [PaymentController::class, 'upgrade_storage'])->middleware(['auth']);
-
+Route::get('/view-category/{name}',[ShopComponent::class, 'viewCategory']);
 
 
 // REMOVE SITE AND ACCOUNT
@@ -437,6 +523,7 @@ Route::get('/launch_site', [PlanController::class, 'launch_site'])->middleware([
 Route::post('/vote', [VideoController::class, 'vote'])->middleware(['auth']);
 Route::post('/unvote', [VideoController::class, 'unvote'])->middleware(['auth']);
 
+
 //admin panel route
 // Route::resource('/admin_panel', AdminPanelController::class)->middleware(['auth']);
 
@@ -492,6 +579,10 @@ Route::get('/all_videos', function () {
 Route::get('/all_users', function () {
     $users = User::all();
     return view('admin_panel.user', compact(['users']));
+})->middleware(['auth']);
+Route::get('/all_products', function () {
+    $product = Stock::all();
+    return view('admin_panel.product', compact(['product']));
 })->middleware(['auth']);
 
 require __DIR__ . '/auth.php';
@@ -564,3 +655,9 @@ Route::get(
 
 //Route::get('/social-media-share', [SocialShareButtonsController::class, 'ShareWidget']);
 //Route::get('/leaderboard', 'CardController@leaderboard');
+Route::middleware(['auth'])->group(function()
+{
+   Route::post('add-rating',[RatingController::class,'add']);
+   Route::post('add-prating',[PratingController::class,'add_prating']);
+});
+ 

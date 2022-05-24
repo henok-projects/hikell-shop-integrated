@@ -4,9 +4,8 @@
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel panel-default">
-                        <div class="p-4">Add New Product</div>
+                        <div class="p-4" style="padding-left: 3%; font-size: 2rem;">Add Product</div>
                     </div class="panel-body">
-
                     @if(Session::has('message'))
                     <div class="alert alert-success" role="alert">{{Session::get('message')}} </div>
                     @endif
@@ -14,16 +13,15 @@
                         <div class="form-group">
                             <label class="col-md-4 control-label">Name</label>
                             <div class="col-md-4">
-                                <input type="text" placeholder="Name" class="form-control input-md" wire:model="name" required/>
+                                <input type="text" placeholder="Name" class="form-control input-md" wire:model="name"
+                                    required />
                             </div>
                         </div>
-
                         <div class="form-group">
                             <label class="col-md-4 control-label">Slug</label>
                             <div class="col-md-4">
                                 <input type="text" placeholder="Slug" class="form-control input-md" wire:model="slug"
                                     wire:keyup="generateSlug" />
-
                             </div>
                         </div>
                         <div class="form-group">
@@ -31,7 +29,6 @@
                             <div class="col-md-4">
                                 <input type="text" placeholder="short_deacription" class="form-control input-md"
                                     wire:model="short_description" required />
-
                             </div>
                         </div>
                         <div class="form-group">
@@ -39,23 +36,27 @@
                             <div class="col-md-4">
                                 <textarea type="text" placeholder="description" class="form-control input-md"
                                     wire:model="description" required></textarea>
-
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-4 control-label">Regular price</label>
                             <div class="col-md-4">
                                 <input type="number" placeholder="Regular price" class="form-control input-md"
-                                    wire:model="regular_price" required/>
-
+                                    wire:model="regular_price" required />
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-4 control-label">Weight</label>
                             <div class="col-md-4">
-                                <input type="number" placeholder="Weight" class="form-control input-md"
-                                    wire:model="SKU" required/>
-
+                                <input type="number" placeholder="Weight" class="form-control input-md" wire:model="SKU"
+                                    required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Allow Reuse</label>
+                            <div class="col-md-4">
+                                <input class="form-check-input" type="checkbox" value="1" id="flexCheckDefault"
+                                    wire:model="allow_reuse" required />
                             </div>
                         </div>
                         <div class="form-group">
@@ -65,13 +66,12 @@
                                     <option value="instock">Instock</option>
                                     <option value="outofstock">Out Of Stock</option>
                                 </select>
-
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-4 control-label">Category</label>
                             <div class="col-md-4">
-                                <select class="form-control" wire:model="category_id">
+                                <select class="form-control" wire:model="category_id" required>
                                     @foreach ($stockcategory as $category)
                                     <option value="{{$category->id}}">{{ $category->name }}</option>
                                     @endforeach
@@ -85,7 +85,6 @@
                                     <option value="0">No</option>
                                     <option value="1">Yes</option>
                                 </select>
-
                             </div>
                         </div>
                         <div class="form-group">
@@ -93,7 +92,6 @@
                             <div class="col-md-4">
                                 <input type="number" placeholder="Quantity" class="form-control input-md"
                                     wire:model="quantity" required />
-
                             </div>
                         </div>
                         <div class="form-group">
@@ -101,7 +99,19 @@
                             <div class="col-md-4">
                                 <input type="file" class="form-control input-md" wire:model="image" />
                                 @if($image)
-                                 <img src="{{$image->temporaryUrl()}}" width="120" />
+                                <img src="{{$image->temporaryUrl()}}" width="120" />
+                                @endif
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label"> product image</label>
+                            <div class="col-md-4">
+                                <input type="file" class="form-control input-md" wire:model="images" multiple />
+                                @if($images)
+                                @foreach ($images as $image )
+                                <img src="{{$image->temporaryUrl()}}" width="120" />
+
+                                @endforeach
                                 @endif
                             </div>
                         </div>
@@ -109,9 +119,9 @@
                             <label class="col-md-4 control-label"></label>
                             <div class="col-md-4">
                                 <button type="submit" class="btn btn-primary">submit</button>
-
                             </div>
                         </div>
+                    </form>
                 </div>
             </div>
 

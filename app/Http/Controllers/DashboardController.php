@@ -9,6 +9,7 @@ use App\Models\Book;
 use App\Models\Commission;
 use App\Models\Podcast;
 use App\Models\Referral;
+use App\Models\Order;
 use App\Models\Site;
 use App\Models\User;
 use App\Models\SubscriptionPayment;
@@ -39,7 +40,8 @@ class DashboardController extends Controller
         }
         if ($menu == 'dashboard') {
             if ($content == 'dashboard') {
-                $balance_total = auth()->user()->balance;
+                // $balance_total = auth()->user()->balance;
+           $balance_total = auth()->user()->balance + Order::where('orginal_owner',auth()->user()->user_id)->sum('total');
                 $total_videos = Video::where('user_id', auth()->user()->user_id)
                     ->where('hgt', '0')
                     ->where('original_owner', auth()->user()->user_id)

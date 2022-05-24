@@ -16,7 +16,7 @@ class CreateShippingsTable extends Migration
         Schema::create('shippings', function (Blueprint $table) {
            $table->id();
             $table->string('product_id');
-            $table->string('order_id');
+            $table->bigInteger('order_id')->unsigned();
             $table->decimal('price');
             $table->integer('qty');
             $table->string('fname');
@@ -31,7 +31,7 @@ class CreateShippingsTable extends Migration
             $table->string('zipcode');
             $table->timestamps();
            $table->foreign('product_id')->references('product_id')->on('stocks')->onDelete('cascade');
-            $table->foreign('order_id')->references('order_id')->on('orders')->onDelete('cascade');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
 
 
         });

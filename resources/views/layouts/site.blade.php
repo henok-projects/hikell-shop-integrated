@@ -8,7 +8,6 @@ $theme = file_exists(public_path("/storage/theme/" . $site->theme_url)) ? $theme
 @extends('layouts.site_master')
 
 @section('content')
-
 <section>
     <div class="flex items-start justify-between pl-2 lg:pl-8 pr-2 py-2 lg:py-4">
         <!-- Site Sidebar -->

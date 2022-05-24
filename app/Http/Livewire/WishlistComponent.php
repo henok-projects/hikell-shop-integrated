@@ -9,7 +9,7 @@ class WishlistComponent extends Component
 {
     public function render()
     {
-        return view('livewire.wishlist-component')->layout('layouts.base');;
+        return view('livewire.wishlist-component')->extends('layouts.stockapp')->section('content');
     }
  public function removeFromWishlist($product_id)
     {
@@ -23,13 +23,31 @@ class WishlistComponent extends Component
              }
             }
     }
+ public function IncreaseQuanitiy($rowId)
+    {
+        $product = Cart::instance('wishlist')->get($rowId);
+        $qty = $product->qty + 1;
+        Cart::instance('wishlist')->update($rowId, $qty);
+        $this->emit('wishlist-count-component', 'refreshComponent');
+
+        //  $this->emit("cart-count-component");
+        //   $product->refresh();
+        //    $this->mount();
+
+    }
+    public function DecreaseQuantity($rowId)
+    {
+        $product = Cart::instance('wishlist')->get($rowId);
+        $qty = $product->qty - 1;
+        Cart::instance('wishlist')->update($rowId, $qty);
+        $this->emit('wishlist-count-component', 'refreshComponent');
+    }
     public function moveProductFromWishLIstToCart($rowId)
     {
      $item=Cart::instance('wishlist')->get($rowId);
      Cart::instance('wishlist')->remove($rowId);
      Cart::instance('cart')->add($item->id,$item->name,1,$item->price)->associate('App\Models\Stock');
-     $this->emitTo('whishlist-count-component','refreshComponent');
-     $this->emitTo('cart-count-component','refreshComponent');
+
 
     }
 }

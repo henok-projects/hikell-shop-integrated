@@ -15,7 +15,12 @@ class DashboardContentList extends Component
     public $fileLocation = '';
     public $fileThumbnail = '';
     protected $listeners = ['refreshContent' => '$refresh'];
+    public function deleteproduct($id){
+       $product = Stock::find($id);
+       $product->delete();
+       session()->flash('message','product delete sucsussfuly');
 
+    }
     protected function fetch_data(){
         $location = $thumbnail = '';
         if ($this->content == 'ebook') {
@@ -42,8 +47,9 @@ class DashboardContentList extends Component
             $this->lists = Stock::where('stock_status' ,'instock')->orderBy('created_at', 'desc')
                         // ->where('user_id', auth()->user()->user_id)
                         // ->with('site')
-                        ->paginate(20);}
-else if ($this->content == 'podcast') {
+                        ->paginate(20);
+        }
+          else if ($this->content == 'podcast') {
             $this->fileLocation = 'podcasts/';
             $this->lists = Podcast::orderBy('created_at', 'desc')
                         ->where('user_id', auth()->user()->user_id)

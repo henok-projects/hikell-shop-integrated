@@ -19,9 +19,9 @@ class StockCategory extends Seeder
         $stockCategories = [
             'Electronics',
             'Shoose',
-            'Clouth',
+            'Clothes',
             'Food',
-            'Coffee',
+            'machine',
             'Others'
         ];
        foreach ($stockCategories as $stockCategory) {

@@ -188,7 +188,7 @@ $curUser = auth()->user();
                                     @endif
                                     <span class="text-sm text-red-600">
                                         @if ($list->user_id == $list->original_owner &&
-    Carbon\Carbon::now()->subDays(60)->gte(\Carbon\Carbon::parse($list->created_at)))
+                                            Carbon\Carbon::now()->subDays(60)->gte(\Carbon\Carbon::parse($list->created_at)))
                                             <p style="cursor: pointer;"
                                                 wire:click="deleteContent('{{ $list->video_id }}','1')"> Delete </p>
                                         @elseif($list->user_id != $list->original_owner)

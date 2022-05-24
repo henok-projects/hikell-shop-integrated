@@ -375,8 +375,7 @@ $latestRound = IdolRoundController::getLatestRound();
                 </a> --}}
                 @if(auth()->user()->isAdmin())
                 <a :class="{'hover:bg-gray-200 border-gray-300': !isDark, 'hover:bg-gray-900 border-gray-700': isDark}"
-                    class="flex items-center block px-4 py-3 tracking-wide border-b focus:outline-none" href="{{ route("
-                    admin_panel.index") }}"
+                    class="flex items-center block px-4 py-3 tracking-wide border-b focus:outline-none" href="{{ route("admin_panel.index") }}"
                     :class="{'hover:bg-gray-200 text-dark': !isDark, 'hover:bg-gray-900 hover:text-white text-white': isDark}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 fill-current iconSize-bigger"
                         :class="{'text-dark': !isDark, 'text-white': isDark}" viewBox="0 0 24 24">

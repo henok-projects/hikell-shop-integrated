@@ -4,9 +4,8 @@
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel panel-default">
-                        <div class="p-4">edit</div>
+                        <div class="p-4" style="padding-left: 3%; font-size: 2rem;">Edit Product</div>
                     </div class="panel-body">
-
                     @if(Session::has('message'))
                     <div class="alert alert-success" role="alert">{{Session::get('message')}} </div>
                     @endif
@@ -61,8 +60,8 @@
                         <div class="form-group">
                             <label class="col-md-4 control-label">Storck</label>
                             <div class="col-md-4">
-                                <select class="form-control" wire:model="stock_status">
-                                    <option value="instock">Instock</option>
+                                <select class="form-control" wire:model="stock_status" required>
+                                    <option value="instock">In Stock</option>
                                     <option value="outofstock">Out Of Stock</option>
                                 </select>
 
@@ -71,7 +70,7 @@
                         <div class="form-group">
                             <label class="col-md-4 control-label">Category</label>
                             <div class="col-md-4">
-                                <select class="form-control" wire:model="category_id">
+                                <select class="form-control" wire:model="category_id" required>
                                     @foreach ($stockcategory as $category)
                                     <option value="{{$category->id}}">{{ $category->name }}</option>
                                     @endforeach
@@ -81,7 +80,7 @@
                         <div class="form-group">
                             <label class="col-md-4 control-label">Featured</label>
                             <div class="col-md-4">
-                                <select class="form-control" wire:model="featured">
+                                <select class="form-control" wire:model="featured" required>
                                     <option value="0">No</option>
                                     <option value="1">Yes</option>
                                 </select>
@@ -110,11 +109,13 @@
                         <div class="form-group">
                             <label class="col-md-4 control-label"></label>
                             <div class="col-md-4">
-                                <button type="submit" class="btn btn-primary">update</button>
+                                <button  type="submit" class="btn btn-primary">update</button>
 
                             </div>
                         </div>
+                  </form>
                 </div>
+
             </div>
 
         </div>

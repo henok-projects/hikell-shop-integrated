@@ -3,13 +3,10 @@ $currentRoute = Route::currentRouteName();
 $title = ucfirst($site->site_name);
 $meta_keywords=ucfirst($site->site_name);
 $meta_description=ucfirst($site->page_description);
-
-
 $curUser = auth()->user();
 
 $theme = file_exists(public_path("/storage/theme/" . $site->theme_url)) ? $theme : asset('/images/hgt2.jpg');
 @endphp
-
 @extends('layouts.site_master')
 @section('content')
 <section>
@@ -232,8 +229,8 @@ $theme = file_exists(public_path("/storage/theme/" . $site->theme_url)) ? $theme
                                                                 <x-label for="ig_link"
                                                                     :value="__('Allow free trial:')" />
                                                                 <input type="checkbox" class="ml-3 text-blue-500"
-                                                                    name="allow_trial"
-                                                                    {{ $site->trial_period ? 'checked' : '' }} />
+                                                                    name="allow_trial" {{ $site->trial_period ?
+                                                                'checked' : '' }} />
                                                             </div>
                                                             <div
                                                                 class="flex items-center {{ $site->trial_period ? '' : 'hidden' }}">
@@ -268,6 +265,10 @@ $theme = file_exists(public_path("/storage/theme/" . $site->theme_url)) ? $theme
                                 <a href="/site/{{ $site->site_name.'/'.auth()->user()->user_id}}"
                                     class="flex items-center px-2 py-0 ml-2 text-blue-100 bg-gray-500 rounded-lg">
                                     <span>view as user</span>
+                                </a>
+                               <a href="/store/{{ $site->site_name}}"
+                                    class="flex items-center px-2 py-0 ml-2 text-blue-100 bg-gray-500 rounded-lg">
+                                    <span>store</span>
                                 </a>
                                 @endif
                             </div>

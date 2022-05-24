@@ -42,6 +42,12 @@
                          HGT Videos
                     </a>
                 </li>
+                <li class="inline-flex py-2 md:my-0 hover:bg-gray-300 lg:hover:bg-transparent">
+                    <a href="{{ url('user',['menu'=>'payment','content'=>'revenuestore']) }}" class="block pl-4 no-underline align-middle border-l-4 border-transparent hover:text-black lg:hover:border-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-corner-down-right"><polyline points="15 10 20 15 15 20"></polyline><path d="M4 4v7a4 4 0 0 0 4 4h12"></path></svg>
+                         Store
+                    </a>
+                </li>
 
                 <li class="inline-flex py-2 md:my-0 hover:bg-gray-300 lg:hover:bg-transparent">
                     <a href="{{ url('user',['menu'=>'payment','content'=>'revenuereferral']) }}" class="block pl-4 no-underline align-middle border-l-4 border-transparent hover:text-black lg:hover:border-gray-600">

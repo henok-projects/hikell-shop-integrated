@@ -14,7 +14,7 @@ class CreateStocksTable extends Migration
     public function up()
     {
         Schema::create('stocks', function (Blueprint $table) {
-        $table->id();
+        $table->bigIncrements('id');
         $table->string('user_id');
         $table->string('site_id');
         $table->string('product_id')->unique();
@@ -26,9 +26,11 @@ class CreateStocksTable extends Migration
         $table->decimal('sale_price')->nullable();
         $table->string('SKU');
         $table->enum('stock_status',['instock','outofstock']);
+        $table->enum('allow_reuse', [0, 1])->default(0);
         $table->boolean('featured')->default(false);
         $table->unsignedInteger('quantity')->default(10);
         $table->string('image')->nullable();
+        $table->string('images')->nullable();
         $table->string('category_id')->nullable();
         $table->timestamps();
         
